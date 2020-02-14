@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +13,13 @@ namespace Notification.Controllers
     [Route("api/[controller]")]
     public class NotificationController : Controller
     {
+        private readonly ILogger<NotificationController> logger;
+
+        public NotificationController(ILogger<NotificationController> logger)
+        {
+            this.logger = logger;
+        }
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -33,6 +41,7 @@ namespace Notification.Controllers
             Stream reqBody = Request.Body;
             StreamReader reader = new StreamReader(reqBody);
             var response = await reader.ReadToEndAsync();
+            logger.LogInformation(response);
             return Ok();
         }
 
